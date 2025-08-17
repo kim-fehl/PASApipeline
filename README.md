@@ -36,3 +36,21 @@ flowchart TB
 | **Strategy**       | **Description**                                                                                                                                                                                  | **Pros**                                        | **Cons**                                                    |
 | _de novo_          | Assemblies generated solely from RNA-Seq reads without genome reference guidance (e.g. Trinity, RNA-Bloom)                                                                                       | Captures novel and sample-specific transcripts  | Potential misassemblies, chimeric contigs, isoform collapse |
 | genome-guided (GG) | Genome is used to align RNA-seq reads before assembling them into transcripts (e.g., Cufflinks, StringTie), or as a guide to cluster _de novo_ transcripts (e.g., Trinity in genome-guided mode) | Accurate exon–intron boundaries; fewer chimeras | Dependent on reference quality; may miss novel loci         |
+
+
+**Repository Overview**
+
+The project hosts the “Program to Assemble Spliced Alignments” (PASA) genome annotation pipeline. The README introduces it as a tool that ingests transcript data (ESTs, cDNA, RNA‑Seq) and refines gene models through high‑quality spliced alignments while supporting alternative splicing and poly‑A site analysis.
+
+The `docs/` directory provides a much more thorough manual in AsciiDoc format. The main index explains that PASA leverages spliced alignments to model gene structures and maintain annotations. It highlights improvements brought by PASA2 and lists installation and usage topics.
+
+**Key Components**
+
+- **Pipeline runner** – `Launch_PASA_pipeline.pl` orchestrates the main workflow. It loads Perl libraries, handles configuration, and executes a sequence of scripts to align transcripts, build assemblies, and compare annotations.
+- **Perl modules** – under `PerlLib/` are numerous modules handling alignment validation, database interaction, pipeline utilities (e.g., `Pipeliner.pm` for checkpointed execution), FASTA I/O, and more.
+- **C++ assembler** – `pasa_cpp/` contains the source for the core “pasa” alignment assembler, built via the top-level `Makefile`.
+- **Plugins & third‑party tools** – `pasa-plugins/` bundles utilities such as `seqclean` (transcript cleaning) and `slclust` for sequence clustering.
+- **Sample pipeline** – `sample_data/` includes scripts and configurations demonstrating how to run PASA end‑to‑end. The helper script `__run_sample_pipeline.pl` shows typical command‑line options for aligning, building assemblies, comparing annotations, running alternative splicing analysis, and predicting ORFs.
+- **Configuration templates** – `pasa_conf/` holds template `.conf` files and alignment/annotation configuration examples.
+- **PasaWeb** – a lightweight web interface (located in `PasaWeb/`) that can be started via `run_PasaWeb.pl`. It relies on `lighttpd` and CGI scripts for browsing results.
+- **Docker support** – `Docker/` contains a Dockerfile and helpers to build and test a containerized installation.
