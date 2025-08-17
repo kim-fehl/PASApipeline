@@ -1,4 +1,9 @@
-import sys, os, subprocess, time
+#!/usr/bin/env python3
+
+import sys
+import os
+import subprocess
+import time
 
 
 
@@ -23,20 +28,20 @@ def run_commands (cmd_list, max_simult_processes=10):
                     if ret != 0:
                         # errored out
                         failed_procs.append(p)
-                        print >> sys.stderr, "process errored: CMD: " + p['cmd']
+                        print("process errored: CMD: " + p['cmd'], file=sys.stderr)
                     else:
                         # exited normally
-                        print >> sys.stderr, "process completed successfully"
+                        print("process completed successfully", file=sys.stderr)
                 else:
                     # process still running
                     not_done.append(p)
-                    print >> sys.stderr, "process still running"
+                    print("process still running", file=sys.stderr)
 
             procs = not_done
         
             
         # execute command
-        print >> sys.stderr, "CMD: " + cmd
+        print("CMD: " + cmd, file=sys.stderr)
 
         p = { 'proc':None, 'cmd':None }
         p['proc'] = subprocess.Popen(cmd, shell=True)
@@ -51,14 +56,14 @@ def run_commands (cmd_list, max_simult_processes=10):
         if ret != 0:
             # errored out
             failed_procs.append(p)
-            print >> sys.stderr, "process errored: CMD: " + p['cmd'] 
+            print("process errored: CMD: " + p['cmd'], file=sys.stderr)
         else:
             # exited normally
-            print >> sys.stderr, "process completed successfully"
+            print("process completed successfully", file=sys.stderr)
 
 
 
-    print >> sys.stderr, "There were " + str(len(failed_procs)) + " failed processes."
+    print("There were " + str(len(failed_procs)) + " failed processes.", file=sys.stderr)
     
     return failed_procs
 
